@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creative MY OWN Channel - Monday.com Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'monday-blue': '#0073EA',
+                        'monday-purple': '#635BFF',
+                        'monday-success': '#00CA72',
+                        'monday-warning': '#FDCA24',
+                        'monday-error': '#E2445C',
+                        'monday-bg': '#F6F7FB',
+                        'monday-text': '#323338',
+                        'monday-text-secondary': '#676879',
+                        'monday-text-muted': '#A1A1AA',
+                        'monday-accent': '#6161FF'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'monday': '0 4px 20px rgba(0, 0, 0, 0.08)',
+                        'monday-hover': '0 8px 30px rgba(0, 0, 0, 0.12)'
+                    }
+                }
+            }
+        };
+    </script>
+    <style>
+        * {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        
+        .monday-gradient {
+            background: linear-gradient(135deg, #635BFF 0%, #0073EA 100%);
+        }
+        
+        .status-completed {
+            background-color: #00CA72;
+            color: white;
+        }
+        
+        .status-working {
+            background-color: #FDCA24;
+            color: #323338;
+        }
+        
+        .status-progress {
+            background-color: #635BFF;
+            color: white;
+        }
+        
+        .priority-low {
+            background-color: #579BFC;
+            color: white;
+        }
+        
+        .priority-medium {
+            background-color: #635BFF;
+            color: white;
+        }
+        
+        .priority-high {
+            background-color: #E2445C;
+            color: white;
+        }
+        
+        .editable-cell:hover {
+            background-color: #F5F6FA;
+            cursor: text;
+        }
+        
+        .group-header {
+            background: linear-gradient(90deg, #E8F4FF 0%, #F0F8FF 100%);
+        }
+        
+        .sidebar-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .table-row:hover {
+            background-color: #FAFBFC;
+        }
+
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapsible-content.expanded {
+            max-height: 1000px;
+        }
+    </style>
+</head>
+<body class="bg-monday-bg font-inter">
+    <!-- @COMPONENT: Layout [Main application layout with sidebar and content] -->
+    <div class="flex h-screen overflow-hidden">
+        <!-- @COMPONENT: Sidebar [Navigation sidebar with workspaces and menu items] -->
+        <div id="sidebar" class="sidebar-transition w-280 bg-white border-r border-gray-200 flex flex-col shadow-monday">
+            <!-- Sidebar Header -->
+            <div class="p-4 border-b border-gray-200">
+                <!-- @COMPONENT: WorkspaceDropdown [Workspace selection dropdown] -->
+                <div class="mb-4">
+                    <button class="w-full flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 transition-colors" data-event="click:toggleWorkspaceDropdown">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 monday-gradient rounded-lg flex items-center justify-center">
+                                <i class="fas fa-briefcase text-white text-sm"></i>
+                            </div>
+                            <div class="text-left">
+                                <div class="text-sm font-medium text-monday-text" data-bind="workspace.name">Creative MY OWN Channel</div>
+                                <div class="text-xs text-monday-text-secondary">Main workspace</div>
+                            </div>
+                        </div>
+                        <i class="fas fa-chevron-down text-monday-text-muted"></i>
+                    </button>
+                </div>
+
+                <!-- @COMPONENT: Search [Global search functionality] -->
+                <div class="relative">
+                    <input type="text" placeholder="Search" class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-monday-blue transition-colors" data-functionality="Global search across boards and items">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-monday-text-muted"></i>
+                </div>
+            </div>
+
+            <!-- Navigation Menu -->
+            <div class="flex-1 overflow-y-auto p-4">
+                <!-- @COMPONENT: NavigationMenu [Main navigation items] -->
+                <nav class="space-y-2">
+                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-home text-monday-text-muted w-5"></i>
+                        <span class="text-sm text-monday-text">Home</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg bg-monday-blue text-white">
+                        <i class="fas fa-user w-5"></i>
+                        <span class="text-sm">My work</span>
+                    </a>
+                </nav>
+
+                <!-- @COMPONENT: FavoritesSection [Favorites accordion section] -->
+                <div class="mt-6">
+                    <button class="w-full flex items-center justify-between p-2 text-left hover:bg-gray-50 rounded-lg transition-colors" data-event="click:toggleFavorites">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-chevron-right text-monday-text-muted text-xs transform transition-transform" id="favoritesChevron"></i>
+                            <i class="fas fa-star text-monday-warning w-5"></i>
+                            <span class="text-sm font-medium text-monday-text">Favorites</span>
+                        </div>
+                    </button>
+                    <div class="collapsible-content" id="favoritesContent">
+                        <div class="ml-6 mt-2 space-y-1">
+                            <a href="#" class="block p-2 text-sm text-monday-text-secondary hover:bg-gray-50 rounded">Quick Projects</a>
+                            <a href="#" class="block p-2 text-sm text-monday-text-secondary hover:bg-gray-50 rounded">Team Tasks</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- @COMPONENT: WorkspacesSection [Workspaces accordion section] -->
+                <div class="mt-4">
+                    <button class="w-full flex items-center justify-between p-2 text-left hover:bg-gray-50 rounded-lg transition-colors" data-event="click:toggleWorkspaces">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-chevron-down text-monday-text-muted text-xs transform transition-transform" id="workspacesChevron"></i>
+                            <i class="fas fa-briefcase text-monday-blue w-5"></i>
+                            <span class="text-sm font-medium text-monday-text">Workspaces</span>
+                        </div>
+                    </button>
+                    <div class="collapsible-content expanded" id="workspacesContent">
+                        <div class="ml-6 mt-2 space-y-1">
+                            <a href="#" class="block p-2 text-sm text-monday-text hover:bg-gray-50 rounded font-medium">Creative MY OWN Channel</a>
+                            <a href="#" class="block p-2 text-sm text-monday-text-secondary hover:bg-gray-50 rounded">Marketing Team</a>
+                            <a href="#" class="block p-2 text-sm text-monday-text-secondary hover:bg-gray-50 rounded">Development</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Collapse Button -->
+            <div class="p-4 border-t border-gray-200">
+                <button class="flex items-center space-x-2 text-monday-text-secondary hover:text-monday-text transition-colors" data-event="click:toggleSidebar">
+                    <i class="fas fa-chevron-left"></i>
+                    <span class="text-sm">Collapse</span>
+                </button>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- @COMPONENT: MainContent [Main board content area] -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Header -->
+            <header class="bg-white border-b border-gray-200 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-2xl font-semibold text-monday-text" data-bind="board.title">Creative MY OWN Channel</h1>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 text-sm bg-gray-100 text-monday-text rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-share-alt mr-2"></i>Enhance
+                            </button>
+                            <button class="px-3 py-1 text-sm bg-gray-100 text-monday-text rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-link mr-2"></i>Integrate
+                            </button>
+                            <button class="px-3 py-1 text-sm bg-gray-100 text-monday-text rounded-lg hover:bg-gray-200 transition-colors">
+                                <i class="fas fa-robot mr-2"></i>Automate / 6
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center -space-x-2">
+                            <!-- User avatars -->
+                            <div class="w-8 h-8 bg-monday-purple rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-medium">JD</div>
+                            <div class="w-8 h-8 bg-monday-success rounded-full border-2 border-white flex items-center justify-center text-white text-xs font-medium">AM</div>
+                        </div>
+                        <button class="px-4 py-2 text-sm bg-monday-blue text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-user-plus mr-2"></i>Invite / 1
+                        </button>
+                        <button class="p-2 text-monday-text-muted hover:text-monday-text transition-colors">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Board Tabs -->
+                <div class="mt-4 flex items-center space-x-6">
+                    <button class="flex items-center space-x-2 pb-2 border-b-2 border-monday-blue text-monday-blue">
+                        <i class="fas fa-th-large"></i>
+                        <span class="text-sm font-medium">Main table</span>
+                    </button>
+                    <button class="flex items-center space-x-2 pb-2 text-monday-text-secondary hover:text-monday-text transition-colors">
+                        <i class="fas fa-wpforms"></i>
+                        <span class="text-sm">Request Form</span>
+                    </button>
+                    <button class="flex items-center space-x-2 pb-2 text-monday-text-secondary hover:text-monday-text transition-colors">
+                        <i class="fas fa-columns"></i>
+                        <span class="text-sm">Kanban</span>
+                    </button>
+                    <button class="text-monday-text-muted hover:text-monday-text transition-colors">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Board Controls -->
+            <div class="bg-white border-b border-gray-200 px-6 py-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button class="px-4 py-2 bg-monday-blue text-white rounded-lg hover:bg-blue-600 transition-colors text-sm" data-event="click:addNewItem">
+                            <i class="fas fa-plus mr-2"></i>New request
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-monday-text">
+                            <i class="fas fa-search mr-2"></i>Search
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-monday-text">
+                            <i class="fas fa-user mr-2"></i>Person
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-monday-text">
+                            <i class="fas fa-filter mr-2"></i>Filter
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-monday-text">
+                            <i class="fas fa-sort mr-2"></i>Sort
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-monday-text">
+                            <i class="fas fa-eye-slash mr-2"></i>Hide
+                        </button>
+                        <button class="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm text-monday-text">
+                            <i class="fas fa-layer-group mr-2"></i>Group by
+                        </button>
+                    </div>
+                    <button class="p-2 text-monday-text-muted hover:text-monday-text transition-colors">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- @COMPONENT: BoardTable [Main table with grouped sections] -->
+            <div class="flex-1 overflow-y-auto bg-monday-bg">
+                <div class="p-6">
+                    
+                    <!-- @COMPONENT: GroupSection [Incoming Requests group] -->
+                    <div class="mb-6 bg-white rounded-lg shadow-monday overflow-hidden">
+                        <div class="group-header p-4 flex items-center justify-between border-l-4 border-blue-400">
+                            <div class="flex items-center space-x-3">
+                                <button class="text-monday-text-muted hover:text-monday-text transition-colors" data-event="click:toggleGroup">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <h3 class="text-lg font-semibold text-monday-text">Incoming Requests</h3>
+                                <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">1 item</span>
+                            </div>
+                            <button class="text-monday-text-muted hover:text-monday-blue transition-colors" data-event="click:addItemToGroup">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <!-- Table Header -->
+                        <div class="grid grid-cols-12 gap-4 px-4 py-3 bg-gray-50 border-t border-gray-200 text-xs font-medium text-monday-text-secondary">
+                            <div class="col-span-2">Request</div>
+                            <div class="col-span-1">Owner</div>
+                            <div class="col-span-1">Priority</div>
+                            <div class="col-span-1">Status</div>
+                            <div class="col-span-1">Due Date</div>
+                            <div class="col-span-2">Creative Brief</div>
+                            <div class="col-span-1">Assignee</div>
+                            <div class="col-span-1">Type</div>
+                            <div class="col-span-2">Project Success Prediction</div>
+                        </div>
+
+                        <!-- Table Row -->
+                        <div class="table-row grid grid-cols-12 gap-4 px-4 py-4 border-t border-gray-100 items-center">
+                            <div class="col-span-2">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors" data-bind="item.name" data-event="click:editInline">
+                                    Creative 1
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="w-8 h-8 bg-monday-purple rounded-full flex items-center justify-center text-white text-xs font-medium">
+                                    JD
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="priority-medium px-2 py-1 rounded-full text-xs font-medium">Medium</span>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="status-working px-3 py-1 rounded-full text-xs font-medium">Working on it</span>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors text-sm text-monday-text-secondary" data-bind="item.dueDate">
+                                    <!-- No due date set -->
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors text-sm text-monday-text" data-bind="item.brief">
+                                    Landing page about working with us
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-plus text-gray-500 text-xs"></i>
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="bg-red-100 text-red-700 px-2 py-1 rounded-full text-xs font-medium">Social Media</span>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="text-sm text-monday-text">Low likelihood of success because: The concept needs more...</div>
+                            </div>
+                        </div>
+
+                        <!-- Add new item row -->
+                        <div class="px-4 py-3 border-t border-gray-100">
+                            <button class="text-monday-blue hover:text-blue-600 transition-colors text-sm flex items-center" data-event="click:addRequest">
+                                <i class="fas fa-plus mr-2"></i>Add request
+                            </button>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: GroupSection -->
+
+                    <!-- @COMPONENT: GroupSection [In progress group] -->
+                    <div class="mb-6 bg-white rounded-lg shadow-monday overflow-hidden">
+                        <div class="group-header p-4 flex items-center justify-between border-l-4 border-purple-400">
+                            <div class="flex items-center space-x-3">
+                                <button class="text-monday-text-muted hover:text-monday-text transition-colors" data-event="click:toggleGroup">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <h3 class="text-lg font-semibold text-monday-text">In progress</h3>
+                                <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-medium">0 items</span>
+                            </div>
+                            <button class="text-monday-text-muted hover:text-monday-blue transition-colors" data-event="click:addItemToGroup">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <!-- Empty state for in progress -->
+                        <div class="px-4 py-8 text-center text-monday-text-muted">
+                            <i class="fas fa-tasks text-2xl mb-2"></i>
+                            <p class="text-sm">No items in progress</p>
+                        </div>
+
+                        <!-- Add new item row -->
+                        <div class="px-4 py-3 border-t border-gray-100">
+                            <button class="text-monday-blue hover:text-blue-600 transition-colors text-sm flex items-center" data-event="click:addRequest">
+                                <i class="fas fa-plus mr-2"></i>Add request
+                            </button>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: GroupSection -->
+
+                    <!-- @COMPONENT: GroupSection [Completed group] -->
+                    <div class="mb-6 bg-white rounded-lg shadow-monday overflow-hidden">
+                        <div class="group-header p-4 flex items-center justify-between border-l-4 border-green-400">
+                            <div class="flex items-center space-x-3">
+                                <button class="text-monday-text-muted hover:text-monday-text transition-colors" data-event="click:toggleGroup">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                                <h3 class="text-lg font-semibold text-monday-text">Completed</h3>
+                                <span class="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs font-medium">2 items</span>
+                            </div>
+                            <button class="text-monday-text-muted hover:text-monday-blue transition-colors" data-event="click:addItemToGroup">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+
+                        <!-- Table Header -->
+                        <div class="grid grid-cols-12 gap-4 px-4 py-3 bg-gray-50 border-t border-gray-200 text-xs font-medium text-monday-text-secondary">
+                            <div class="col-span-2">Request</div>
+                            <div class="col-span-1">Owner</div>
+                            <div class="col-span-1">Priority</div>
+                            <div class="col-span-1">Status</div>
+                            <div class="col-span-1">Due Date</div>
+                            <div class="col-span-2">Creative Brief</div>
+                            <div class="col-span-1">Assignee</div>
+                            <div class="col-span-1">Type</div>
+                            <div class="col-span-2">Project Success Prediction</div>
+                        </div>
+
+                        <!-- @MAP: completedItems.map(item => ( -->
+                        <!-- Table Row 1 -->
+                        <div class="table-row grid grid-cols-12 gap-4 px-4 py-4 border-t border-gray-100 items-center">
+                            <div class="col-span-2">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors" data-bind="item.name">
+                                    Creative 3
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="w-8 h-8 bg-monday-success rounded-full flex items-center justify-center text-white text-xs font-medium">
+                                    AM
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="priority-low px-2 py-1 rounded-full text-xs font-medium">Low</span>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="status-completed px-3 py-1 rounded-full text-xs font-medium">Completed/Live</span>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors text-sm text-monday-text-secondary">
+                                    <!-- No due date -->
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors text-sm text-monday-text">
+                                    I need a flyer to send to our customers
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
+                                    DS
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="bg-purple-100 text-purple-700 px-2 py-1 rounded-full text-xs font-medium">Document</span>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="text-sm text-monday-text">High likelihood of success</div>
+                            </div>
+                        </div>
+
+                        <!-- Table Row 2 -->
+                        <div class="table-row grid grid-cols-12 gap-4 px-4 py-4 border-t border-gray-100 items-center">
+                            <div class="col-span-2">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors" data-bind="item.name">
+                                    Creative 2
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="w-8 h-8 bg-monday-blue rounded-full flex items-center justify-center text-white text-xs font-medium">
+                                    JD
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="priority-medium px-2 py-1 rounded-full text-xs font-medium">Medium</span>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="status-completed px-3 py-1 rounded-full text-xs font-medium">Completed/Live</span>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors text-sm text-monday-text-secondary">
+                                    <!-- No due date -->
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="editable-cell p-2 rounded hover:bg-gray-50 transition-colors text-sm text-monday-text">
+                                    The campaign is going to be an email marketing...
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <div class="w-8 h-8 bg-pink-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
+                                    LC
+                                </div>
+                            </div>
+                            <div class="col-span-1">
+                                <span class="bg-pink-100 text-pink-700 px-2 py-1 rounded-full text-xs font-medium">Landing Page</span>
+                            </div>
+                            <div class="col-span-2">
+                                <div class="text-sm text-monday-text">High likelihood of success</div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+
+                        <!-- Add new item row -->
+                        <div class="px-4 py-3 border-t border-gray-100">
+                            <button class="text-monday-blue hover:text-blue-600 transition-colors text-sm flex items-center" data-event="click:addRequest">
+                                <i class="fas fa-plus mr-2"></i>Add request
+                            </button>
+                        </div>
+                    </div>
+                    <!-- @END_COMPONENT: GroupSection -->
+
+                    <!-- Add new group button -->
+                    <div class="mt-6">
+                        <button class="flex items-center space-x-2 px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-monday-blue hover:bg-blue-50 transition-colors w-full text-left" data-event="click:addNewGroup">
+                            <i class="fas fa-plus text-monday-blue"></i>
+                            <span class="text-monday-blue font-medium">Add new group</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: BoardTable -->
+        </div>
+        <!-- @END_COMPONENT: MainContent -->
+    </div>
+    <!-- @END_COMPONENT: Layout -->
+
+    <!-- @COMPONENT: AddRequestModal [Modal for adding new requests] -->
+    <div id="addRequestModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center" data-implementation="Modal should be managed by React state">
+        <div class="bg-white rounded-lg shadow-monday-hover max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-monday-text">Add New Request</h2>
+                    <button class="text-monday-text-muted hover:text-monday-text" data-event="click:closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <form class="p-6 space-y-4" data-implementation="Form should handle validation and submission">
+                <div>
+                    <label class="block text-sm font-medium text-monday-text mb-2">Request Name</label>
+                    <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-monday-blue" placeholder="Enter request name" data-mock="true">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-monday-text mb-2">Creative Brief</label>
+                    <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-monday-blue" rows="3" placeholder="Describe your request..." data-mock="true"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-monday-text mb-2">Priority</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-monday-blue" data-mock="true">
+                            <option>Low</option>
+                            <option>Medium</option>
+                            <option>High</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-monday-text mb-2">Type</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-monday-blue" data-mock="true">
+                            <option>Social Media</option>
+                            <option>Document</option>
+                            <option>Landing Page</option>
+                            <option>Email Campaign</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end space-x-3 pt-4">
+                    <button type="button" class="px-4 py-2 text-monday-text border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors" data-event="click:closeModal">
+                        Cancel
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-monday-blue text-white rounded-lg hover:bg-blue-600 transition-colors" data-event="submit:createRequest">
+                        Create Request
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: AddRequestModal -->
+
+    <!-- Help Button -->
+    <button class="fixed bottom-6 right-6 w-12 h-12 bg-monday-blue text-white rounded-full shadow-monday-hover hover:bg-blue-600 transition-colors flex items-center justify-center z-40">
+        <i class="fas fa-question text-lg"></i>
+    </button>
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        // TODO: Replace with React component state management
+
+        (function() {
+            // Sidebar functionality
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.querySelector('[data-event="click:toggleSidebar"]');
+            
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', function() {
+                    sidebar.classList.toggle('w-280');
+                    sidebar.classList.toggle('w-16');
+                });
+            }
+
+            // Collapsible sections
+            function toggleCollapsible(buttonSelector, contentSelector, chevronSelector) {
+                const button = document.querySelector(buttonSelector);
+                const content = document.getElementById(contentSelector);
+                const chevron = document.getElementById(chevronSelector);
+                
+                if (button && content && chevron) {
+                    button.addEventListener('click', function() {
+                        content.classList.toggle('expanded');
+                        chevron.classList.toggle('fa-chevron-right');
+                        chevron.classList.toggle('fa-chevron-down');
+                    });
+                }
+            }
+
+            toggleCollapsible('[data-event="click:toggleFavorites"]', 'favoritesContent', 'favoritesChevron');
+            toggleCollapsible('[data-event="click:toggleWorkspaces"]', 'workspacesContent', 'workspacesChevron');
+
+            // Modal functionality
+            const modal = document.getElementById('addRequestModal');
+            const addRequestButtons = document.querySelectorAll('[data-event="click:addNewItem"], [data-event="click:addRequest"]');
+            const closeModalButtons = document.querySelectorAll('[data-event="click:closeModal"]');
+
+            addRequestButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    modal.classList.remove('hidden');
+                });
+            });
+
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    modal.classList.add('hidden');
+                });
+            });
+
+            // Close modal on outside click
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+
+            // Inline editing simulation
+            const editableCells = document.querySelectorAll('.editable-cell');
+            editableCells.forEach(cell => {
+                cell.addEventListener('click', function() {
+                    // TODO: Implement inline editing with React state
+                    this.style.outline = '2px solid #0073EA';
+                    this.style.outlineOffset = '2px';
+                    
+                    setTimeout(() => {
+                        this.style.outline = 'none';
+                        this.style.outlineOffset = '0';
+                    }, 2000);
+                });
+            });
+
+            // Form submission
+            const form = document.querySelector('form[data-implementation*="validation"]');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // TODO: Implement form validation and submission
+                    console.log('Form submitted - implement validation and API call');
+                    modal.classList.add('hidden');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

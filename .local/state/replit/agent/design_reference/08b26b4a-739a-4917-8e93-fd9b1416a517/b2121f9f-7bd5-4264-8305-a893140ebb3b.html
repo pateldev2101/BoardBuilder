@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monday.com Clone - Creative Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'monday-blue': '#0073EA',
+                        'monday-purple': '#5034FF',
+                        'monday-green': '#00C875',
+                        'monday-orange': '#FDAB3D',
+                        'monday-gray': '#676879',
+                        'monday-light': '#F5F6F8',
+                        'monday-bg': '#FAFBFC',
+                        'sidebar-bg': '#FFFFFF',
+                        'border-color': '#E1E5E9'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-monday-bg text-gray-800">
+    
+    <!-- @COMPONENT: AppLayout -->
+    <div class="flex min-h-screen">
+        
+        <!-- @COMPONENT: Sidebar -->
+        <div id="sidebar" class="w-80 bg-sidebar-bg border-r border-border-color transition-all duration-300 flex-shrink-0">
+            <!-- Sidebar Header -->
+            <div class="p-4 border-b border-border-color">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-monday-blue rounded-lg flex items-center justify-center text-white text-sm font-semibold">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <span class="font-semibold text-gray-900">monday</span>
+                    </div>
+                    <button id="sidebarToggle" class="p-1 hover:bg-gray-100 rounded transition-colors">
+                        <i class="fas fa-chevron-left text-gray-500"></i>
+                    </button>
+                </div>
+                
+                <!-- Workspace Selector -->
+                <div class="relative">
+                    <button class="w-full flex items-center justify-between p-2 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors" data-event="click:toggleWorkspaceDropdown">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-6 h-6 bg-monday-purple rounded flex items-center justify-center text-white text-xs font-semibold">
+                                M
+                            </div>
+                            <span class="font-medium text-sm" data-bind="workspace.name">Main workspace</span>
+                        </div>
+                        <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                    </button>
+                    <!-- Workspace Dropdown (hidden by default) -->
+                    <div id="workspaceDropdown" class="absolute top-full left-0 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg z-50 hidden">
+                        <div class="p-2">
+                            <div class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                <div class="w-6 h-6 bg-monday-purple rounded flex items-center justify-center text-white text-xs font-semibold">M</div>
+                                <span class="text-sm">Main workspace</span>
+                            </div>
+                            <div class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded cursor-pointer">
+                                <div class="w-6 h-6 bg-monday-green rounded flex items-center justify-center text-white text-xs font-semibold">C</div>
+                                <span class="text-sm">Creative Team</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation Items -->
+            <div class="p-4">
+                <!-- Search -->
+                <div class="relative mb-4">
+                    <input type="text" placeholder="Search" class="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-transparent">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-xs"></i>
+                </div>
+                
+                <!-- Main Navigation -->
+                <nav class="space-y-1">
+                    <a href="#" class="flex items-center space-x-3 p-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i class="fas fa-home text-gray-500 w-4"></i>
+                        <span>Home</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-3 p-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                        <i class="fas fa-briefcase text-gray-500 w-4"></i>
+                        <span>My work</span>
+                    </a>
+                </nav>
+                
+                <!-- Favorites Section -->
+                <div class="mt-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide">Favorites</h3>
+                        <button class="p-1 hover:bg-gray-100 rounded">
+                            <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-1">
+                        <a href="#" class="flex items-center space-x-3 p-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-star text-monday-orange w-4"></i>
+                            <span>Creative Projects</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 p-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+                            <i class="fas fa-star text-monday-orange w-4"></i>
+                            <span>Client Requests</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Workspaces Section -->
+                <div class="mt-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wide">Workspaces</h3>
+                        <button class="p-1 hover:bg-gray-100 rounded">
+                            <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex items-center space-x-3 p-2 text-sm text-gray-700 hover:bg-gray-100 rounded-lg transition-colors cursor-pointer">
+                            <div class="w-4 h-4 bg-monday-purple rounded flex items-center justify-center">
+                                <i class="fas fa-folder text-white text-xs"></i>
+                            </div>
+                            <span>Main workspace</span>
+                        </div>
+                        <div class="ml-7 space-y-1">
+                            <a href="#" class="flex items-center space-x-2 p-1 text-sm text-monday-blue hover:bg-blue-50 rounded transition-colors bg-blue-50 font-medium">
+                                <span>Creative MY OWN Channel</span>
+                            </a>
+                            <a href="#" class="flex items-center space-x-2 p-1 text-sm text-gray-600 hover:bg-gray-100 rounded transition-colors">
+                                <span>Marketing Board</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add New Group Button -->
+            <div class="p-4 mt-auto border-t border-border-color">
+                <button class="w-full flex items-center space-x-2 p-2 text-sm text-monday-blue hover:bg-blue-50 rounded-lg transition-colors" data-event="click:addNewGroup">
+                    <i class="fas fa-plus"></i>
+                    <span>Add new group</span>
+                </button>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+        
+        <!-- @COMPONENT: MainContent -->
+        <div class="flex-1 flex flex-col min-w-0">
+            
+            <!-- @COMPONENT: TopBar -->
+            <div class="bg-white border-b border-border-color p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button id="mobileSidebarToggle" class="lg:hidden p-2 hover:bg-gray-100 rounded">
+                            <i class="fas fa-bars text-gray-600"></i>
+                        </button>
+                        <div>
+                            <h1 class="text-xl font-semibold text-gray-900" data-bind="board.title">Creative MY OWN Channel</h1>
+                            <div class="flex items-center space-x-4 mt-1">
+                                <span class="text-sm text-gray-500">Main table</span>
+                                <span class="text-sm text-gray-400">|</span>
+                                <span class="text-sm text-gray-500">Request Form</span>
+                                <span class="text-sm text-gray-400">|</span>
+                                <span class="text-sm text-gray-500">Kanban</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3">
+                        <button class="px-4 py-2 text-sm bg-monday-blue text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            <i class="fas fa-share-alt mr-2"></i>Share
+                        </button>
+                        <button class="p-2 hover:bg-gray-100 rounded transition-colors">
+                            <i class="fas fa-cog text-gray-600"></i>
+                        </button>
+                        <div class="w-8 h-8 bg-monday-purple rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                            A
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: TopBar -->
+            
+            <!-- @COMPONENT: BoardControls -->
+            <div class="bg-white border-b border-border-color p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <button class="px-4 py-2 bg-monday-blue text-white text-sm rounded-lg hover:bg-blue-700 transition-colors" data-event="click:addNewRequest">
+                            <i class="fas fa-plus mr-2"></i>New request
+                        </button>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-search mr-2"></i>Search
+                            </button>
+                            <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-user mr-2"></i>Person
+                            </button>
+                            <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-filter mr-2"></i>Filter
+                            </button>
+                            <button class="px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-sort mr-2"></i>Sort
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <button class="p-2 hover:bg-gray-100 rounded transition-colors">
+                            <i class="fas fa-eye text-gray-600"></i>
+                        </button>
+                        <button class="p-2 hover:bg-gray-100 rounded transition-colors">
+                            <i class="fas fa-ellipsis-h text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: BoardControls -->
+            
+            <!-- @COMPONENT: BoardTable -->
+            <div class="flex-1 overflow-auto bg-white">
+                <div class="min-w-full">
+                    
+                    <!-- Table Header -->
+                    <div class="sticky top-0 bg-white border-b border-border-color z-10">
+                        <div class="flex">
+                            <div class="w-8 flex-shrink-0"></div> <!-- Group toggle space -->
+                            <div class="w-64 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-border-color">Request</div>
+                            <div class="w-32 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-border-color">Owner</div>
+                            <div class="w-32 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-border-color">Priority</div>
+                            <div class="w-32 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-border-color">Status</div>
+                            <div class="w-32 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-border-color">Due Date</div>
+                            <div class="w-48 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-border-color">Creative Brief</div>
+                            <div class="w-32 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-border-color">Assignment</div>
+                            <div class="w-32 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-border-color">Type</div>
+                            <div class="flex-1 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Project Success Prediction</div>
+                        </div>
+                    </div>
+                    
+                    <!-- @COMPONENT: GroupSection - Incoming Requests -->
+                    <div class="group-section" data-group="incoming">
+                        <!-- Group Header -->
+                        <div class="bg-blue-50 border-l-4 border-monday-blue">
+                            <div class="flex items-center">
+                                <button class="w-8 h-12 flex items-center justify-center hover:bg-blue-100 transition-colors" data-event="click:toggleGroup" data-target="incoming">
+                                    <i class="fas fa-chevron-down text-monday-blue text-xs"></i>
+                                </button>
+                                <div class="flex-1 py-3 px-4">
+                                    <div class="flex items-center space-x-3">
+                                        <h3 class="font-semibold text-monday-blue text-sm">Incoming Requests</h3>
+                                        <span class="px-2 py-1 bg-monday-blue text-white text-xs rounded-full">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Group Items -->
+                        <div id="group-incoming" class="group-items">
+                            <!-- @MAP: incomingRequests.map(request => ( -->
+                            <div class="flex hover:bg-gray-50 border-b border-gray-100" data-mock="true">
+                                <div class="w-8 flex-shrink-0"></div>
+                                <div class="w-64 px-4 py-4 border-r border-border-color">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-6 h-6 bg-monday-blue rounded flex items-center justify-center text-white text-xs font-medium">1</span>
+                                        <span class="text-sm font-medium text-gray-900" data-bind="request.title" contenteditable="true" data-implementation="Inline editing for request title">Creative 1</span>
+                                    </div>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <select class="w-full text-sm border-0 bg-transparent focus:outline-none" data-bind="request.owner">
+                                        <option>Select owner</option>
+                                        <option selected>John Doe</option>
+                                        <option>Jane Smith</option>
+                                    </select>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <select class="w-full text-sm border-0 bg-transparent focus:outline-none" data-bind="request.priority">
+                                        <option>Select priority</option>
+                                        <option selected>High</option>
+                                        <option>Medium</option>
+                                        <option>Low</option>
+                                    </select>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <select class="w-full px-3 py-1 text-sm bg-monday-blue text-white rounded-lg focus:outline-none" data-bind="request.status">
+                                        <option value="stuck">Stuck</option>
+                                        <option value="working" selected>Working on it</option>
+                                        <option value="done">Done</option>
+                                    </select>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <input type="date" class="w-full text-sm border-0 bg-transparent focus:outline-none" data-bind="request.dueDate">
+                                </div>
+                                <div class="w-48 px-4 py-4 border-r border-border-color">
+                                    <span class="text-sm text-gray-600" contenteditable="true" data-bind="request.brief" data-implementation="Inline editing for creative brief">Landing page about working...</span>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <div class="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
+                                        <div class="w-4 h-4 bg-purple-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <select class="w-full text-sm border-0 bg-transparent focus:outline-none" data-bind="request.type">
+                                        <option selected>Social Media</option>
+                                        <option>Landing Page</option>
+                                        <option>Document</option>
+                                    </select>
+                                </div>
+                                <div class="flex-1 px-4 py-4">
+                                    <span class="text-sm text-gray-600" data-bind="request.prediction">Low likelihood of success Rationale: The br...</span>
+                                </div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                            
+                            <!-- Add Request Row -->
+                            <div class="flex hover:bg-gray-50 border-b border-gray-100 text-gray-400">
+                                <div class="w-8 flex-shrink-0"></div>
+                                <div class="w-64 px-4 py-4 border-r border-border-color">
+                                    <button class="flex items-center space-x-2 text-sm hover:text-monday-blue transition-colors" data-event="click:addRequest" data-group="incoming">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Add request</span>
+                                    </button>
+                                </div>
+                                <div class="flex-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- @COMPONENT: GroupSection - In Progress -->
+                    <div class="group-section" data-group="progress">
+                        <!-- Group Header -->
+                        <div class="bg-purple-50 border-l-4 border-monday-purple">
+                            <div class="flex items-center">
+                                <button class="w-8 h-12 flex items-center justify-center hover:bg-purple-100 transition-colors" data-event="click:toggleGroup" data-target="progress">
+                                    <i class="fas fa-chevron-down text-monday-purple text-xs"></i>
+                                </button>
+                                <div class="flex-1 py-3 px-4">
+                                    <div class="flex items-center space-x-3">
+                                        <h3 class="font-semibold text-monday-purple text-sm">In progress</h3>
+                                        <span class="px-2 py-1 bg-monday-purple text-white text-xs rounded-full">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Group Items -->
+                        <div id="group-progress" class="group-items">
+                            <!-- Add Request Row -->
+                            <div class="flex hover:bg-gray-50 border-b border-gray-100 text-gray-400">
+                                <div class="w-8 flex-shrink-0"></div>
+                                <div class="w-64 px-4 py-4 border-r border-border-color">
+                                    <button class="flex items-center space-x-2 text-sm hover:text-monday-purple transition-colors" data-event="click:addRequest" data-group="progress">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Add request</span>
+                                    </button>
+                                </div>
+                                <div class="flex-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- @COMPONENT: GroupSection - Completed -->
+                    <div class="group-section" data-group="completed">
+                        <!-- Group Header -->
+                        <div class="bg-green-50 border-l-4 border-monday-green">
+                            <div class="flex items-center">
+                                <button class="w-8 h-12 flex items-center justify-center hover:bg-green-100 transition-colors" data-event="click:toggleGroup" data-target="completed">
+                                    <i class="fas fa-chevron-down text-monday-green text-xs"></i>
+                                </button>
+                                <div class="flex-1 py-3 px-4">
+                                    <div class="flex items-center space-x-3">
+                                        <h3 class="font-semibold text-monday-green text-sm">Completed</h3>
+                                        <span class="px-2 py-1 bg-monday-green text-white text-xs rounded-full">2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Group Items -->
+                        <div id="group-completed" class="group-items">
+                            <!-- @MAP: completedRequests.map(request => ( -->
+                            <div class="flex hover:bg-gray-50 border-b border-gray-100" data-mock="true">
+                                <div class="w-8 flex-shrink-0"></div>
+                                <div class="w-64 px-4 py-4 border-r border-border-color">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-6 h-6 bg-monday-green rounded flex items-center justify-center text-white text-xs font-medium">3</span>
+                                        <span class="text-sm font-medium text-gray-900" data-bind="request.title" contenteditable="true">Creative 3</span>
+                                    </div>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+                                        <span class="text-sm" data-bind="request.owner">Unassigned</span>
+                                    </div>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <span class="px-3 py-1 text-xs bg-blue-100 text-blue-800 rounded-full" data-bind="request.priority">Low</span>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <span class="px-3 py-1 text-sm bg-monday-green text-white rounded-lg" data-bind="request.status">Completed/Live</span>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <span class="text-sm text-gray-600" data-bind="request.dueDate">Dec 15</span>
+                                </div>
+                                <div class="w-48 px-4 py-4 border-r border-border-color">
+                                    <span class="text-sm text-gray-600" contenteditable="true" data-bind="request.brief">I need a flyer to send to our cus...</span>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <div class="w-6 h-6 bg-purple-100 rounded flex items-center justify-center">
+                                        <div class="w-4 h-4 bg-purple-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <span class="text-sm" data-bind="request.type">Document</span>
+                                </div>
+                                <div class="flex-1 px-4 py-4">
+                                    <span class="text-sm text-gray-600" data-bind="request.prediction">High likelihood of success</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex hover:bg-gray-50 border-b border-gray-100" data-mock="true">
+                                <div class="w-8 flex-shrink-0"></div>
+                                <div class="w-64 px-4 py-4 border-r border-border-color">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="w-6 h-6 bg-monday-green rounded flex items-center justify-center text-white text-xs font-medium">2</span>
+                                        <span class="text-sm font-medium text-gray-900" data-bind="request.title" contenteditable="true">Creative 2</span>
+                                    </div>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <div class="flex items-center space-x-1">
+                                        <div class="w-6 h-6 bg-gray-300 rounded-full"></div>
+                                        <span class="text-sm" data-bind="request.owner">Unassigned</span>
+                                    </div>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <span class="px-3 py-1 text-xs bg-orange-100 text-orange-800 rounded-full" data-bind="request.priority">Medium</span>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <span class="px-3 py-1 text-sm bg-monday-green text-white rounded-lg" data-bind="request.status">Completed/Live</span>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <span class="text-sm text-gray-600" data-bind="request.dueDate">Dec 10</span>
+                                </div>
+                                <div class="w-48 px-4 py-4 border-r border-border-color">
+                                    <span class="text-sm text-gray-600" contenteditable="true" data-bind="request.brief">The campaign is going to be ar...</span>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <div class="w-6 h-6 bg-pink-100 rounded flex items-center justify-center">
+                                        <div class="w-4 h-4 bg-pink-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="w-32 px-4 py-4 border-r border-border-color">
+                                    <span class="text-sm" data-bind="request.type">Landing Page</span>
+                                </div>
+                                <div class="flex-1 px-4 py-4">
+                                    <span class="text-sm text-gray-600" data-bind="request.prediction">High likelihood of success</span>
+                                </div>
+                            </div>
+                            <!-- @END_MAP )) -->
+                            
+                            <!-- Add Request Row -->
+                            <div class="flex hover:bg-gray-50 border-b border-gray-100 text-gray-400">
+                                <div class="w-8 flex-shrink-0"></div>
+                                <div class="w-64 px-4 py-4 border-r border-border-color">
+                                    <button class="flex items-center space-x-2 text-sm hover:text-monday-green transition-colors" data-event="click:addRequest" data-group="completed">
+                                        <i class="fas fa-plus"></i>
+                                        <span>Add request</span>
+                                    </button>
+                                </div>
+                                <div class="flex-1"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <!-- @END_COMPONENT: BoardTable -->
+            
+        </div>
+        <!-- @END_COMPONENT: MainContent -->
+        
+    </div>
+    
+    <!-- @COMPONENT: AddRequestModal -->
+    <div id="addRequestModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg w-full max-w-md">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Add New Request</h3>
+                    <button id="closeModal" class="p-1 hover:bg-gray-100 rounded">
+                        <i class="fas fa-times text-gray-400"></i>
+                    </button>
+                </div>
+                
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Request Title</label>
+                        <input type="text" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-transparent" placeholder="Enter request title">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Owner</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-transparent">
+                            <option>Select owner</option>
+                            <option>John Doe</option>
+                            <option>Jane Smith</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                        <select class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-transparent">
+                            <option>Select priority</option>
+                            <option>High</option>
+                            <option>Medium</option>
+                            <option>Low</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
+                        <input type="date" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-transparent">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Creative Brief</label>
+                        <textarea class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-blue focus:border-transparent" rows="3" placeholder="Describe the creative request..."></textarea>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" id="cancelModal" class="flex-1 px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+                        <button type="submit" class="flex-1 px-4 py-2 text-sm bg-monday-blue text-white rounded-lg hover:bg-blue-700 transition-colors">Add Request</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: AddRequestModal -->
+    
+    <script>
+        (function() {
+            // Sidebar toggle functionality
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const mobileSidebarToggle = document.getElementById('mobileSidebarToggle');
+            
+            function toggleSidebar() {
+                sidebar.classList.toggle('w-80');
+                sidebar.classList.toggle('w-16');
+                // TODO: Implement sidebar content hiding/showing logic
+            }
+            
+            sidebarToggle?.addEventListener('click', toggleSidebar);
+            mobileSidebarToggle?.addEventListener('click', toggleSidebar);
+            
+            // Workspace dropdown
+            const workspaceDropdown = document.getElementById('workspaceDropdown');
+            document.querySelector('[data-event="click:toggleWorkspaceDropdown"]')?.addEventListener('click', function(e) {
+                e.preventDefault();
+                workspaceDropdown.classList.toggle('hidden');
+            });
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('[data-event="click:toggleWorkspaceDropdown"]') && !e.target.closest('#workspaceDropdown')) {
+                    workspaceDropdown.classList.add('hidden');
+                }
+            });
+            
+            // Group toggle functionality
+            document.querySelectorAll('[data-event="click:toggleGroup"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const target = this.getAttribute('data-target');
+                    const groupItems = document.getElementById(`group-${target}`);
+                    const icon = this.querySelector('i');
+                    
+                    groupItems.classList.toggle('hidden');
+                    icon.classList.toggle('fa-chevron-down');
+                    icon.classList.toggle('fa-chevron-right');
+                });
+            });
+            
+            // Modal functionality
+            const addRequestModal = document.getElementById('addRequestModal');
+            const closeModal = document.getElementById('closeModal');
+            const cancelModal = document.getElementById('cancelModal');
+            
+            // Open modal when clicking "Add Request" buttons
+            document.querySelectorAll('[data-event="click:addRequest"], [data-event="click:addNewRequest"]').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    addRequestModal.classList.remove('hidden');
+                });
+            });
+            
+            // Close modal
+            function closeModalFunction() {
+                addRequestModal.classList.add('hidden');
+            }
+            
+            closeModal?.addEventListener('click', closeModalFunction);
+            cancelModal?.addEventListener('click', closeModalFunction);
+            
+            // Close modal when clicking outside
+            addRequestModal?.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModalFunction();
+                }
+            });
+            
+            // Form submission (placeholder)
+            document.querySelector('#addRequestModal form')?.addEventListener('submit', function(e) {
+                e.preventDefault();
+                // TODO: Implement form submission logic
+                console.log('Form submitted - implement actual submission logic');
+                closeModalFunction();
+            });
+            
+            // Inline editing functionality (basic)
+            document.querySelectorAll('[contenteditable="true"]').forEach(element => {
+                element.addEventListener('focus', function() {
+                    this.style.outline = '2px solid #0073EA';
+                    this.style.outlineOffset = '2px';
+                });
+                
+                element.addEventListener('blur', function() {
+                    this.style.outline = 'none';
+                    // TODO: Save changes to backend
+                });
+                
+                element.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.blur();
+                    }
+                });
+            });
+            
+            // Responsive behavior
+            function handleResize() {
+                if (window.innerWidth < 1024) {
+                    sidebar.classList.add('hidden');
+                } else {
+                    sidebar.classList.remove('hidden');
+                }
+            }
+            
+            window.addEventListener('resize', handleResize);
+            handleResize(); // Initial call
+        })();
+    </script>
+    
+</body>
+</html>

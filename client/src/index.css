@@ -1,0 +1,168 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import '@vibe/core/tokens';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(210 25% 7.8431%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(210 25% 7.8431%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(210 25% 7.8431%);
+  --primary: hsl(214 100% 45.9%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(210 25% 7.8431%);
+  --secondary-foreground: hsl(0 0% 100%);
+  --muted: hsl(240 4.8% 95.9%);
+  --muted-foreground: hsl(240 3.8% 46.1%);
+  --accent: hsl(240 4.8% 95.9%);
+  --accent-foreground: hsl(240 5.9% 10%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(240 5.9% 90%);
+  --input: hsl(240 5.9% 90%);
+  --ring: hsl(214 100% 45.9%);
+  --chart-1: hsl(214 100% 45.9%);
+  --chart-2: hsl(159.7826 100% 36.0784%);
+  --chart-3: hsl(42.0290 92.8251% 56.2745%);
+  --chart-4: hsl(147.1429 78.5047% 41.9608%);
+  --chart-5: hsl(341.4894 75.2000% 50.9804%);
+  
+  /* Monday.com specific colors */
+  --monday-blue: hsl(214 100% 45.9%);
+  --monday-purple: hsl(252 83% 67%);
+  --monday-success: hsl(142 84% 44%);
+  --monday-warning: hsl(44 95% 57%);
+  --monday-error: hsl(348 79% 59%);
+  --monday-bg: hsl(222 14% 96%);
+  --monday-text: hsl(220 14% 20%);
+  --monday-text-secondary: hsl(217 10% 47%);
+  --monday-text-muted: hsl(220 8% 63%);
+  --monday-accent: hsl(251 100% 68%);
+  
+  /* Status colors */
+  --status-working: hsl(44 95% 57%);
+  --status-completed: hsl(142 84% 44%);
+  --status-progress: hsl(252 83% 67%);
+  
+  /* Priority colors */
+  --priority-low: hsl(214 100% 64%);
+  --priority-medium: hsl(252 83% 67%);
+  --priority-high: hsl(348 79% 59%);
+  
+  --radius: 0.5rem;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+.dark {
+  --background: hsl(220 14% 8%);
+  --foreground: hsl(220 14% 93%);
+  --card: hsl(220 14% 10%);
+  --card-foreground: hsl(220 14% 93%);
+  --popover: hsl(220 14% 8%);
+  --popover-foreground: hsl(220 14% 93%);
+  --primary: hsl(214 100% 45.9%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(220 14% 15%);
+  --secondary-foreground: hsl(220 14% 93%);
+  --muted: hsl(220 14% 15%);
+  --muted-foreground: hsl(220 8% 63%);
+  --accent: hsl(220 14% 15%);
+  --accent-foreground: hsl(220 14% 93%);
+  --destructive: hsl(0 84.2% 60.2%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(220 14% 15%);
+  --input: hsl(220 14% 15%);
+  --ring: hsl(214 100% 45.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-monday-bg text-monday-text;
+    font-family: var(--font-sans);
+  }
+}
+
+@layer utilities {
+  .text-monday-blue {
+    color: var(--monday-blue);
+  }
+  
+  .text-monday-purple {
+    color: var(--monday-purple);
+  }
+  
+  .text-monday-success {
+    color: var(--monday-success);
+  }
+  
+  .text-monday-warning {
+    color: var(--monday-warning);
+  }
+  
+  .text-monday-error {
+    color: var(--monday-error);
+  }
+  
+  .text-monday-text {
+    color: var(--monday-text);
+  }
+  
+  .text-monday-text-secondary {
+    color: var(--monday-text-secondary);
+  }
+  
+  .text-monday-text-muted {
+    color: var(--monday-text-muted);
+  }
+  
+  .bg-monday-blue {
+    background-color: var(--monday-blue);
+  }
+  
+  .bg-monday-purple {
+    background-color: var(--monday-purple);
+  }
+  
+  .bg-monday-success {
+    background-color: var(--monday-success);
+  }
+  
+  .bg-monday-warning {
+    background-color: var(--monday-warning);
+  }
+  
+  .bg-monday-error {
+    background-color: var(--monday-error);
+  }
+  
+  .bg-monday-bg {
+    background-color: var(--monday-bg);
+  }
+  
+  .bg-monday-accent {
+    background-color: var(--monday-accent);
+  }
+  
+  .border-monday-blue {
+    border-color: var(--monday-blue);
+  }
+  
+  .shadow-monday {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .shadow-monday-hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  }
+  
+  .monday-gradient {
+    background: linear-gradient(135deg, var(--monday-purple) 0%, var(--monday-blue) 100%);
+  }
+}

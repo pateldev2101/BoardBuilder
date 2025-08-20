@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monday.com-Inspired Project Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'monday-purple': '#6161FF',
+                        'monday-blue': '#0085FF',
+                        'monday-green': '#00CA72',
+                        'monday-yellow': '#FFCB00',
+                        'monday-red': '#FF6B6B',
+                        'monday-gray': '#676879',
+                        'monday-light-gray': '#F8F9FB',
+                        'monday-border': '#E6E9EF'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-monday-light-gray font-inter">
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-monday-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 bg-monday-purple rounded-lg flex items-center justify-center">
+                            <i class="fab fa-monday text-white text-sm"></i>
+                        </div>
+                        <h1 class="text-lg font-semibold text-monday-gray">Creative MY OWN Channel</h1>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-monday-gray">
+                        <span class="px-2 py-1 bg-gray-100 rounded">Main table</span>
+                        <span>Request Form</span>
+                        <span>Kanban</span>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-monday-gray hover:text-monday-purple transition-colors">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="text-monday-gray hover:text-monday-purple transition-colors">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                    <div class="w-8 h-8 bg-monday-purple rounded-full flex items-center justify-center">
+                        <span class="text-white text-xs font-medium">JD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Action Bar -->
+        <div class="bg-white rounded-lg shadow-sm border border-monday-border p-4 mb-6">
+            <div class="flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center space-x-4">
+                    <button class="bg-monday-purple text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors flex items-center space-x-2">
+                        <i class="fas fa-plus"></i>
+                        <span>New request</span>
+                    </button>
+                    <div class="relative">
+                        <input type="text" placeholder="Search" class="pl-10 pr-4 py-2 border border-monday-border rounded-lg focus:outline-none focus:ring-2 focus:ring-monday-purple focus:border-transparent">
+                        <i class="fas fa-search absolute left-3 top-3 text-monday-gray text-sm"></i>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button class="flex items-center space-x-2 text-monday-gray hover:text-monday-purple transition-colors">
+                        <i class="fas fa-user"></i>
+                        <span>Person</span>
+                    </button>
+                    <button class="flex items-center space-x-2 text-monday-gray hover:text-monday-purple transition-colors">
+                        <i class="fas fa-filter"></i>
+                        <span>Filter</span>
+                    </button>
+                    <button class="flex items-center space-x-2 text-monday-gray hover:text-monday-purple transition-colors">
+                        <i class="fas fa-sort"></i>
+                        <span>Sort</span>
+                    </button>
+                    <button class="flex items-center space-x-2 text-monday-gray hover:text-monday-purple transition-colors">
+                        <i class="fas fa-eye-slash"></i>
+                        <span>Hide</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="bg-white rounded-lg shadow-sm border border-monday-border">
+            <!-- Table Header -->
+            <div class="grid grid-cols-12 gap-4 p-4 border-b border-monday-border text-sm font-medium text-monday-gray bg-gray-50">
+                <div class="col-span-2">Request</div>
+                <div class="col-span-1">Owner</div>
+                <div class="col-span-1">Priority</div>
+                <div class="col-span-1">Status</div>
+                <div class="col-span-1">Due Date</div>
+                <div class="col-span-2">Creative Brief</div>
+                <div class="col-span-1">Assignee</div>
+                <div class="col-span-1">Type</div>
+                <div class="col-span-2">Project Success Prediction</div>
+            </div>
+
+            <!-- @COMPONENT: GroupSection [collapsible section with items] -->
+            <!-- Incoming Requests Group -->
+            <div class="border-b border-monday-border">
+                <div class="flex items-center p-4 bg-blue-50 hover:bg-blue-100 transition-colors cursor-pointer" data-event="click:toggleGroup">
+                    <div class="flex items-center space-x-3 flex-1">
+                        <i class="fas fa-chevron-down text-monday-blue transform transition-transform" data-implementation="Rotate when collapsed"></i>
+                        <div class="w-1 h-6 bg-monday-blue rounded"></div>
+                        <span class="font-medium text-monday-blue">Incoming Requests</span>
+                        <span class="text-xs text-monday-gray bg-white px-2 py-1 rounded-full">1</span>
+                    </div>
+                </div>
+                
+                <!-- @MAP: incomingRequests.map(request => ( -->
+                <div class="grid grid-cols-12 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors group">
+                    <div class="col-span-2">
+                        <input type="text" value="Creative 1" class="w-full bg-transparent hover:bg-white focus:bg-white border-0 focus:ring-2 focus:ring-monday-purple rounded px-2 py-1 text-sm" data-bind="request.name" data-mock="true">
+                    </div>
+                    <div class="col-span-1">
+                        <div class="w-6 h-6 bg-monday-purple rounded-full flex items-center justify-center">
+                            <span class="text-white text-xs font-medium">JD</span>
+                        </div>
+                    </div>
+                    <div class="col-span-1">
+                        <select class="bg-monday-blue text-white text-xs px-2 py-1 rounded-full border-0 focus:ring-2 focus:ring-monday-purple" data-bind="request.priority">
+                            <option value="urgent">Urgent</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1">
+                        <select class="bg-monday-yellow text-white text-xs px-2 py-1 rounded-full border-0 focus:ring-2 focus:ring-monday-purple" data-bind="request.status">
+                            <option value="not-started">Not Started</option>
+                            <option value="working">Working on it</option>
+                            <option value="stuck">Stuck</option>
+                            <option value="done">Done</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1">
+                        <input type="date" class="text-xs bg-transparent hover:bg-white focus:bg-white border-0 focus:ring-2 focus:ring-monday-purple rounded px-2 py-1" data-bind="request.dueDate">
+                    </div>
+                    <div class="col-span-2">
+                        <input type="text" placeholder="Landing page about working..." class="w-full text-xs bg-transparent hover:bg-white focus:bg-white border-0 focus:ring-2 focus:ring-monday-purple rounded px-2 py-1" data-bind="request.brief" data-mock="true">
+                    </div>
+                    <div class="col-span-1">
+                        <div class="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-xs">AB</span>
+                        </div>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="bg-monday-green text-white text-xs px-2 py-1 rounded-full" data-bind="request.type">Social Media</span>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div class="bg-monday-green h-2 rounded-full" style="width: 75%" data-bind="request.successPrediction"></div>
+                            </div>
+                            <span class="text-xs text-monday-gray">Low likelihood of success</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_MAP )) -->
+
+                <!-- Add New Request Row -->
+                <div class="grid grid-cols-12 gap-4 p-4 border-b border-gray-100 bg-gray-50 opacity-75">
+                    <div class="col-span-2">
+                        <input type="text" placeholder="+ Add request" class="w-full bg-white border border-dashed border-monday-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-monday-purple">
+                    </div>
+                    <div class="col-span-10"></div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: GroupSection -->
+
+            <!-- @COMPONENT: GroupSection [In Progress] -->
+            <!-- In Progress Group -->
+            <div class="border-b border-monday-border">
+                <div class="flex items-center p-4 bg-purple-50 hover:bg-purple-100 transition-colors cursor-pointer">
+                    <div class="flex items-center space-x-3 flex-1">
+                        <i class="fas fa-chevron-down text-purple-600 transform transition-transform"></i>
+                        <div class="w-1 h-6 bg-purple-600 rounded"></div>
+                        <span class="font-medium text-purple-600">In progress</span>
+                        <span class="text-xs text-monday-gray bg-white px-2 py-1 rounded-full">0</span>
+                    </div>
+                </div>
+
+                <!-- Add New Request Row -->
+                <div class="grid grid-cols-12 gap-4 p-4 border-b border-gray-100 bg-gray-50 opacity-75">
+                    <div class="col-span-2">
+                        <input type="text" placeholder="+ Add request" class="w-full bg-white border border-dashed border-monday-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-monday-purple">
+                    </div>
+                    <div class="col-span-10"></div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: GroupSection -->
+
+            <!-- @COMPONENT: GroupSection [Completed] -->
+            <!-- Completed Group -->
+            <div class="border-b border-monday-border">
+                <div class="flex items-center p-4 bg-green-50 hover:bg-green-100 transition-colors cursor-pointer">
+                    <div class="flex items-center space-x-3 flex-1">
+                        <i class="fas fa-chevron-down text-monday-green transform transition-transform"></i>
+                        <div class="w-1 h-6 bg-monday-green rounded"></div>
+                        <span class="font-medium text-monday-green">Completed</span>
+                        <span class="text-xs text-monday-gray bg-white px-2 py-1 rounded-full">2</span>
+                    </div>
+                </div>
+
+                <!-- @MAP: completedRequests.map(request => ( -->
+                <!-- Creative 3 -->
+                <div class="grid grid-cols-12 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors group">
+                    <div class="col-span-2">
+                        <input type="text" value="Creative 3" class="w-full bg-transparent hover:bg-white focus:bg-white border-0 focus:ring-2 focus:ring-monday-purple rounded px-2 py-1 text-sm" data-mock="true">
+                    </div>
+                    <div class="col-span-1">
+                        <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-xs font-medium">MK</span>
+                        </div>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">Low</span>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="bg-monday-green text-white text-xs px-2 py-1 rounded-full">Completed/Live</span>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="text-xs text-monday-gray">Nov 15</span>
+                    </div>
+                    <div class="col-span-2">
+                        <span class="text-xs text-monday-gray">I need a flyer to send to our cus...</span>
+                    </div>
+                    <div class="col-span-1">
+                        <div class="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center">
+                            <span class="text-white text-xs">TC</span>
+                        </div>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="bg-monday-blue text-white text-xs px-2 py-1 rounded-full">Document</span>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div class="bg-monday-green h-2 rounded-full" style="width: 90%"></div>
+                            </div>
+                            <span class="text-xs text-monday-gray">High likelihood of success</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Creative 2 -->
+                <div class="grid grid-cols-12 gap-4 p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors group">
+                    <div class="col-span-2">
+                        <input type="text" value="Creative 2" class="w-full bg-transparent hover:bg-white focus:bg-white border-0 focus:ring-2 focus:ring-monday-purple rounded px-2 py-1 text-sm" data-mock="true">
+                    </div>
+                    <div class="col-span-1">
+                        <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-xs font-medium">LR</span>
+                        </div>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Medium</span>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="bg-monday-green text-white text-xs px-2 py-1 rounded-full">Completed/Live</span>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="text-xs text-monday-gray">Nov 12</span>
+                    </div>
+                    <div class="col-span-2">
+                        <span class="text-xs text-monday-gray">The campaign is going to be ar...</span>
+                    </div>
+                    <div class="col-span-1">
+                        <div class="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
+                            <span class="text-white text-xs">SM</span>
+                        </div>
+                    </div>
+                    <div class="col-span-1">
+                        <span class="bg-purple-500 text-white text-xs px-2 py-1 rounded-full">Landing Page</span>
+                    </div>
+                    <div class="col-span-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="flex-1 bg-gray-200 rounded-full h-2">
+                                <div class="bg-monday-green h-2 rounded-full" style="width: 85%"></div>
+                            </div>
+                            <span class="text-xs text-monday-gray">High likelihood of success</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- @END_MAP )) -->
+
+                <!-- Add New Request Row -->
+                <div class="grid grid-cols-12 gap-4 p-4 border-b border-gray-100 bg-gray-50 opacity-75">
+                    <div class="col-span-2">
+                        <input type="text" placeholder="+ Add request" class="w-full bg-white border border-dashed border-monday-border rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-monday-purple">
+                    </div>
+                    <div class="col-span-10"></div>
+                </div>
+            </div>
+            <!-- @END_COMPONENT: GroupSection -->
+
+            <!-- Add New Group -->
+            <div class="p-4">
+                <button class="flex items-center space-x-2 text-monday-gray hover:text-monday-purple transition-colors">
+                    <i class="fas fa-plus"></i>
+                    <span class="text-sm">Add new group</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="mt-6 flex justify-between items-center">
+            <div class="text-sm text-monday-gray">
+                Showing 3 of 3 items
+            </div>
+            <button class="bg-monday-purple text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition-colors">
+                <i class="fas fa-question-circle mr-2"></i>
+                Help
+            </button>
+        </div>
+    </main>
+
+    <!-- @STATE: isEditing:boolean = false -->
+    <!-- @STATE: groups:array = [] -->
+    <!-- @STATE: selectedItems:array = [] -->
+    <!-- @STATE: draggedItem:object = null -->
+
+    <script>
+        (function() {
+            // TODO: Implement React hooks for state management
+            // TODO: Implement context API for global state
+            // TODO: Add proper form validation
+            // TODO: Include loading states and error handling
+            // TODO: Add keyboard navigation support
+            // TODO: Implement export data functionality
+            // TODO: Add drag and drop functionality for moving items between groups
+
+            // Basic interactivity for demonstration
+            document.addEventListener('DOMContentLoaded', function() {
+                // Group collapse/expand functionality
+                const groupHeaders = document.querySelectorAll('[data-event="click:toggleGroup"]');
+                groupHeaders.forEach(header => {
+                    header.addEventListener('click', function() {
+                        const chevron = this.querySelector('i');
+                        const isExpanded = !chevron.classList.contains('fa-rotate-270');
+                        
+                        if (isExpanded) {
+                            chevron.classList.add('fa-rotate-270');
+                            // Hide group content (in real implementation)
+                        } else {
+                            chevron.classList.remove('fa-rotate-270');
+                            // Show group content (in real implementation)
+                        }
+                    });
+                });
+
+                // Inline editing simulation
+                const editableInputs = document.querySelectorAll('input[data-bind]');
+                editableInputs.forEach(input => {
+                    input.addEventListener('focus', function() {
+                        this.classList.add('ring-2', 'ring-monday-purple');
+                    });
+                    
+                    input.addEventListener('blur', function() {
+                        this.classList.remove('ring-2', 'ring-monday-purple');
+                        // TODO: Save changes to state/API
+                    });
+                });
+
+                // Status and priority dropdown changes
+                const dropdowns = document.querySelectorAll('select[data-bind]');
+                dropdowns.forEach(dropdown => {
+                    dropdown.addEventListener('change', function() {
+                        // TODO: Update item status/priority in state
+                        // TODO: Move item to appropriate group if status changed
+                        console.log(`Updated ${this.dataset.bind} to:`, this.value);
+                    });
+                });
+            });
+
+            // @FUNCTIONALITY: Drag and drop should allow moving items between groups
+            // @FUNCTIONALITY: Status changes should automatically move items to appropriate groups
+            // @FUNCTIONALITY: Add new request should validate required fields
+            // @FUNCTIONALITY: Search should filter across all groups and fields
+            // @FUNCTIONALITY: Export should generate CSV/Excel with all visible data
+        })();
+    </script>
+</body>
+</html>
